@@ -32,7 +32,8 @@ export default function Blog() {
 
         {state === 'error' && (
           <p className="sub">
-            Couldn't reach the backend right now. Check back soon, or make sure the API is running.
+            Couldn't load posts right now. If you just published one, it may take a minute
+            to show up — otherwise check back soon.
           </p>
         )}
 

@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
-import { getStorage } from 'firebase/storage'
 
 // All values come from .env (see .env.example) — none of these are secret in the
 // "must be hidden" sense (they're visible in any deployed frontend bundle), but
@@ -19,4 +18,3 @@ const app = initializeApp(firebaseConfig)
 
 export const db = getFirestore(app)
 export const auth = getAuth(app)
-export const storage = getStorage(app)

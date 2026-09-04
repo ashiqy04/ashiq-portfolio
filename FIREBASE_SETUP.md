@@ -32,12 +32,6 @@ you used in step 3, then paste the whole file into:
 This is what actually enforces "only I can edit" — it's not just a hidden
 `/admin` route, writes are rejected server-side for anyone else.
 
-Do the same for `storage.rules` (used for blog cover image uploads):
-
-**Build → Storage → Get started** (choose production mode, same region as
-Firestore), then **Storage → Rules tab** → paste `storage.rules` (with your
-email swapped in) → **Publish**.
-
 ## 5. Register a web app and get your config
 
 1. **Project settings (gear icon) → General → Your apps → Web (`</>`)**.

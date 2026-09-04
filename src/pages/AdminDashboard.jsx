@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { fetchProjects, createProject, updateProject, deleteProject } from '../lib/projects.js'
 import { fetchAllPostsAdmin, createPost, updatePost, deletePost } from '../lib/posts.js'
-import { uploadCoverImage } from '../lib/storage.js'
 
 const emptyProject = { title: '', desc: '', status: 'local', statusLabel: '', linkLabel: '', link: '', chips: '', sortOrder: 0 }
 const emptyPost = { title: '', slug: '', excerpt: '', content: '', coverImageUrl: '', published: false }
@@ -174,7 +173,6 @@ function PostsPanel() {
   const [form, setForm] = useState(emptyPost)
   const [editingId, setEditingId] = useState(null)
   const [saving, setSaving] = useState(false)
-  const [uploading, setUploading] = useState(false)
   const [error, setError] = useState(null)
 
   function load() {
@@ -221,22 +219,6 @@ function PostsPanel() {
     load()
   }
 
-  async function handleFileSelect(e) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    setError(null)
-    try {
-      const url = await uploadCoverImage(file)
-      setForm((f) => ({ ...f, coverImageUrl: url }))
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setUploading(false)
-      e.target.value = '' // allow re-selecting the same file later
-    }
-  }
-
   return (
     <div className="admin-grid">
       <form onSubmit={handleSubmit} className="admin-form admin-card">
@@ -258,17 +240,9 @@ function PostsPanel() {
         <textarea className="admin-input admin-textarea-lg" rows={12} value={form.content}
           onChange={(e) => setForm({ ...form, content: e.target.value })} />
 
-        <label className="admin-label">Cover image</label>
-        <div className="admin-upload-row">
-          <input className="admin-input" placeholder="/blog-covers/example.svg or paste a URL"
-            value={form.coverImageUrl}
-            onChange={(e) => setForm({ ...form, coverImageUrl: e.target.value })} />
-          <label className="btn btn-ghost admin-upload-btn">
-            {uploading ? 'Uploading…' : 'Upload'}
-            <input type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
-              onChange={handleFileSelect} disabled={uploading} hidden />
-          </label>
-        </div>
+        <label className="admin-label">Cover image URL (relative path, e.g. /blog-covers/example.svg)</label>
+        <input className="admin-input" value={form.coverImageUrl}
+          onChange={(e) => setForm({ ...form, coverImageUrl: e.target.value })} />
         {form.coverImageUrl && (
           <img src={form.coverImageUrl} alt="Cover preview" className="admin-cover-preview" />
         )}
