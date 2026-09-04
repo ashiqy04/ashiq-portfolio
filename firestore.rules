@@ -1,0 +1,27 @@
+rules_version = '2';
+
+// Deploy: Firebase Console → Firestore Database → Rules tab → paste this → Publish
+// (or `firebase deploy --only firestore:rules` if you're using the CLI).
+//
+// Replace YOUR_ADMIN_EMAIL below with your dev Gmail — the same one you'll
+// use to sign in with Google on /admin/login. Everyone else can only read.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == "ashiqy04@gmail.com";
+    }
+
+    match /projects/{projectId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /posts/{postId} {
+      // Public can read a post only if it's published; you can always read all of them.
+      allow read: if resource.data.published == true || isAdmin();
+      allow write: if isAdmin();
+    }
+  }
+}
