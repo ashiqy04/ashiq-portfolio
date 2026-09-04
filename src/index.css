@@ -542,3 +542,61 @@ footer{
   border: 1px solid var(--border);
   object-fit: cover;
 }
+
+.blog-cover-image{
+  width: 100%;
+  max-width: 680px;
+  max-height: 340px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+
+/* ---------- Tech icon tiles (Stack section) ---------- */
+.tech-grid{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.tech-tile{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text-dim);
+  transition: border-color 0.15s, color 0.15s;
+}
+.tech-tile:hover{
+  border-color: var(--amber);
+  color: var(--text);
+}
+.tech-tile svg{ flex-shrink: 0; color: var(--amber); }
+
+/* ---------- Experience ---------- */
+.experience-list{ display: flex; flex-direction: column; gap: 20px; }
+.experience-item{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+.experience-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.experience-title{ font-weight: 700; color: var(--text); font-size: 16px; }
+.experience-company{ color: var(--amber); font-family: var(--mono); font-size: 13.5px; margin-top: 2px; }
+.experience-dates{ font-family: var(--mono); font-size: 12.5px; color: var(--text-faint); white-space: nowrap; }
+.experience-bullets{ margin: 10px 0 0 18px; color: var(--text-dim); font-size: 14.5px; }
+.experience-bullets li{ margin-bottom: 6px; }

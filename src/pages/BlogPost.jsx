@@ -35,7 +35,7 @@ export default function BlogPost() {
         {state === 'loading' && <p className="sub">Loading…</p>}
 
         {state === 'error' && (
-          <p className="sub">Couldn't find that post, or the backend isn't reachable right now.</p>
+          <p className="sub">Couldn't find that post, or it's not available right now.</p>
         )}
 
         {state === 'ready' && post && (
@@ -45,6 +45,9 @@ export default function BlogPost() {
               <div className="terminal-line" style={{ marginBottom: 28 }}>
                 {formatDate(post.publishedAt)}
               </div>
+            )}
+            {post.coverImageUrl && (
+              <img src={post.coverImageUrl} alt="" className="blog-cover-image" />
             )}
             <div className="markdown-body">
               <ReactMarkdown>{post.content}</ReactMarkdown>

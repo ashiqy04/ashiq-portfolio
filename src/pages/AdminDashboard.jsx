@@ -2,13 +2,18 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { fetchProjects, createProject, updateProject, deleteProject } from '../lib/projects.js'
 import { fetchAllPostsAdmin, createPost, updatePost, deletePost } from '../lib/posts.js'
+import { fetchStack, createStackItem, updateStackItem, deleteStackItem } from '../lib/stack.js'
+import { fetchExperience, createExperience, updateExperience, deleteExperience } from '../lib/experience.js'
+import { getTechIcon } from '../lib/techIcons.js'
 
 const emptyProject = { title: '', desc: '', status: 'local', statusLabel: '', linkLabel: '', link: '', chips: '', sortOrder: 0 }
 const emptyPost = { title: '', slug: '', excerpt: '', content: '', coverImageUrl: '', published: false }
+const emptyStackItem = { category: '', title: '', desc: '', tags: '', sortOrder: 0 }
+const emptyExperience = { company: '', title: '', startDate: '', endDate: '', bullets: '', sortOrder: 0 }
 
 export default function AdminDashboard() {
   const { logout } = useAuth()
-  const [tab, setTab] = useState('projects') // projects | posts
+  const [tab, setTab] = useState('projects') // projects | posts | stack | experience
 
   return (
     <div className="wrap" style={{ paddingTop: 40, paddingBottom: 80 }}>
@@ -23,11 +28,17 @@ export default function AdminDashboard() {
       <div className="admin-tabs">
         <button className={tab === 'projects' ? 'admin-tab active' : 'admin-tab'} onClick={() => setTab('projects')}>Projects</button>
         <button className={tab === 'posts' ? 'admin-tab active' : 'admin-tab'} onClick={() => setTab('posts')}>Blog posts</button>
+        <button className={tab === 'stack' ? 'admin-tab active' : 'admin-tab'} onClick={() => setTab('stack')}>Stack</button>
+        <button className={tab === 'experience' ? 'admin-tab active' : 'admin-tab'} onClick={() => setTab('experience')}>Experience</button>
       </div>
 
-      {tab === 'projects' ? <ProjectsPanel /> : <PostsPanel />}
+      {tab === 'projects' && <ProjectsPanel />}
+      {tab === 'posts' && <PostsPanel />}
+      {tab === 'stack' && <StackPanel />}
+      {tab === 'experience' && <ExperiencePanel />}
     </div>
   )
+
 }
 
 // ---------------- Projects ----------------
@@ -278,6 +289,257 @@ function PostsPanel() {
               <div className="project-links">
                 <a onClick={() => startEdit(p)} role="button">Edit</a>
                 <a onClick={() => handleDelete(p.id)} role="button">Delete</a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ---------------- Stack (Capabilities) ----------------
+
+function StackPanel() {
+  const [items, setItems] = useState([])
+  const [form, setForm] = useState(emptyStackItem)
+  const [editingId, setEditingId] = useState(null)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState(null)
+
+  function load() {
+    fetchStack().then(setItems).catch((e) => setError(e.message))
+  }
+
+  useEffect(load, [])
+
+  function startEdit(item) {
+    setEditingId(item.id)
+    setForm({
+      category: item.category || '',
+      title: item.title || '',
+      desc: item.desc || '',
+      tags: (item.tags || []).join(', '),
+      sortOrder: item.sortOrder ?? 0,
+    })
+  }
+
+  function resetForm() {
+    setEditingId(null)
+    setForm(emptyStackItem)
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setSaving(true)
+    setError(null)
+    const payload = {
+      ...form,
+      sortOrder: Number(form.sortOrder) || 0,
+      tags: form.tags.split(',').map((t) => t.trim()).filter(Boolean),
+    }
+    try {
+      if (editingId) {
+        await updateStackItem(editingId, payload)
+      } else {
+        await createStackItem(payload)
+      }
+      resetForm()
+      load()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!confirm('Delete this capability card?')) return
+    await deleteStackItem(id)
+    load()
+  }
+
+  return (
+    <div className="admin-grid">
+      <form onSubmit={handleSubmit} className="admin-form admin-card">
+        <h3>{editingId ? 'Edit capability' : 'New capability'}</h3>
+
+        <label className="admin-label">Category label (e.g. "Backend")</label>
+        <input className="admin-input" required value={form.category}
+          onChange={(e) => setForm({ ...form, category: e.target.value })} />
+
+        <label className="admin-label">Title (e.g. "APIs & Services")</label>
+        <input className="admin-input" required value={form.title}
+          onChange={(e) => setForm({ ...form, title: e.target.value })} />
+
+        <label className="admin-label">Description</label>
+        <textarea className="admin-input" rows={3} value={form.desc}
+          onChange={(e) => setForm({ ...form, desc: e.target.value })} />
+
+        <label className="admin-label">Technologies (comma separated — icons resolve automatically)</label>
+        <input className="admin-input" value={form.tags}
+          onChange={(e) => setForm({ ...form, tags: e.target.value })}
+          placeholder="Java, Spring Boot, PostgreSQL" />
+
+        <label className="admin-label">Sort order</label>
+        <input className="admin-input" type="number" value={form.sortOrder}
+          onChange={(e) => setForm({ ...form, sortOrder: e.target.value })} />
+
+        {error && <p className="admin-error">{error}</p>}
+
+        <div className="admin-form-actions">
+          <button className="btn btn-primary" type="submit" disabled={saving}>
+            {editingId ? 'Save changes' : 'Add capability'}
+          </button>
+          {editingId && <button className="btn btn-ghost" type="button" onClick={resetForm}>Cancel</button>}
+        </div>
+      </form>
+
+      <div>
+        {items.map((item) => (
+          <div className="project" key={item.id}>
+            <div className="project-head">
+              <div className="project-title">{item.category} — {item.title}</div>
+            </div>
+            <p className="desc">{item.desc}</p>
+            <div className="project-footer">
+              <div className="chiplist">
+                {(item.tags || []).map((t) => {
+                  const Icon = getTechIcon(t)
+                  return <span className="chip" key={t}><Icon size={13} style={{ marginRight: 4, verticalAlign: -2 }} />{t}</span>
+                })}
+              </div>
+              <div className="project-links">
+                <a onClick={() => startEdit(item)} role="button">Edit</a>
+                <a onClick={() => handleDelete(item.id)} role="button">Delete</a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ---------------- Experience ----------------
+
+function ExperiencePanel() {
+  const [roles, setRoles] = useState([])
+  const [form, setForm] = useState(emptyExperience)
+  const [editingId, setEditingId] = useState(null)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState(null)
+
+  function load() {
+    fetchExperience().then(setRoles).catch((e) => setError(e.message))
+  }
+
+  useEffect(load, [])
+
+  function startEdit(role) {
+    setEditingId(role.id)
+    setForm({
+      company: role.company || '',
+      title: role.title || '',
+      startDate: role.startDate || '',
+      endDate: role.endDate || '',
+      bullets: (role.bullets || []).join('\n'),
+      sortOrder: role.sortOrder ?? 0,
+    })
+  }
+
+  function resetForm() {
+    setEditingId(null)
+    setForm(emptyExperience)
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setSaving(true)
+    setError(null)
+    const payload = {
+      ...form,
+      sortOrder: Number(form.sortOrder) || 0,
+      bullets: form.bullets.split('\n').map((b) => b.trim()).filter(Boolean),
+    }
+    try {
+      if (editingId) {
+        await updateExperience(editingId, payload)
+      } else {
+        await createExperience(payload)
+      }
+      resetForm()
+      load()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!confirm('Delete this role?')) return
+    await deleteExperience(id)
+    load()
+  }
+
+  return (
+    <div className="admin-grid">
+      <form onSubmit={handleSubmit} className="admin-form admin-card">
+        <h3>{editingId ? 'Edit role' : 'New role'}</h3>
+
+        <label className="admin-label">Company</label>
+        <input className="admin-input" required value={form.company}
+          onChange={(e) => setForm({ ...form, company: e.target.value })} />
+
+        <label className="admin-label">Title</label>
+        <input className="admin-input" required value={form.title}
+          onChange={(e) => setForm({ ...form, title: e.target.value })} />
+
+        <label className="admin-label">Start date (e.g. "Jan 2023")</label>
+        <input className="admin-input" value={form.startDate}
+          onChange={(e) => setForm({ ...form, startDate: e.target.value })} />
+
+        <label className="admin-label">End date (blank or "Present" if current)</label>
+        <input className="admin-input" value={form.endDate}
+          onChange={(e) => setForm({ ...form, endDate: e.target.value })} />
+
+        <label className="admin-label">Bullets (one per line)</label>
+        <textarea className="admin-input" rows={5} value={form.bullets}
+          onChange={(e) => setForm({ ...form, bullets: e.target.value })}
+          placeholder={'Built X that did Y\nOwned Z end to end'} />
+
+        <label className="admin-label">Sort order</label>
+        <input className="admin-input" type="number" value={form.sortOrder}
+          onChange={(e) => setForm({ ...form, sortOrder: e.target.value })} />
+
+        {error && <p className="admin-error">{error}</p>}
+
+        <div className="admin-form-actions">
+          <button className="btn btn-primary" type="submit" disabled={saving}>
+            {editingId ? 'Save changes' : 'Add role'}
+          </button>
+          {editingId && <button className="btn btn-ghost" type="button" onClick={resetForm}>Cancel</button>}
+        </div>
+      </form>
+
+      <div>
+        {roles.map((role) => (
+          <div className="project" key={role.id}>
+            <div className="project-head">
+              <div className="project-title">{role.title} — {role.company}</div>
+            </div>
+            <p className="desc">{role.startDate}{role.endDate ? ` — ${role.endDate}` : ''}</p>
+            {role.bullets && role.bullets.length > 0 && (
+              <ul style={{ margin: '8px 0 0 18px', color: 'var(--text-dim)', fontSize: 14 }}>
+                {role.bullets.map((b, i) => <li key={i}>{b}</li>)}
+              </ul>
+            )}
+            <div className="project-footer" style={{ marginTop: 10 }}>
+              <span />
+              <div className="project-links">
+                <a onClick={() => startEdit(role)} role="button">Edit</a>
+                <a onClick={() => handleDelete(role.id)} role="button">Delete</a>
               </div>
             </div>
           </div>

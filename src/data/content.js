@@ -6,6 +6,7 @@ export const STATUS_BAR = {
   availability: 'available for freelance work',
   navLinks: [
     { label: 'stack', href: '/#stack' },
+    { label: 'experience', href: '/#experience' },
     { label: 'work', href: '/#work' },
     { label: 'blog', href: '/blog' },
     { label: 'contact', href: '/#contact' },
@@ -25,22 +26,22 @@ export const HERO = {
 
 export const PILLARS = [
   {
-    tag: 'Backend',
+    category: 'Backend',
     title: 'APIs & Services',
     desc: 'REST APIs, auth, database design, and integrations built with Spring Boot.',
-    chips: ['Java', 'Spring Boot', 'PostgreSQL', 'MySQL', 'REST'],
+    tags: ['Java', 'Spring Boot', 'PostgreSQL', 'MySQL', 'REST'],
   },
   {
-    tag: 'Frontend',
+    category: 'Frontend',
     title: 'Web Interfaces',
     desc: 'Functional, clean UIs that connect cleanly to a real backend.',
-    chips: ['React', 'HTML/CSS', 'JavaScript'],
+    tags: ['React', 'HTML', 'CSS', 'JavaScript'],
   },
   {
-    tag: 'Mobile',
+    category: 'Mobile',
     title: 'Mobile App Development',
     desc: 'Android apps built and published end to end, store-ready.',
-    chips: ['Kotlin', 'Java', 'Android SDK', 'Play Store'],
+    tags: ['Kotlin', 'Java', 'Android SDK', 'Play Store'],
   },
 ]
 
