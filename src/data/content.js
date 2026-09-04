@@ -22,6 +22,13 @@ export const HERO = {
     'web interfaces, and native Android apps, built and shipped end to end.',
   primaryCta: { label: 'Get in touch', href: '#contact' },
   secondaryCta: { label: "See what I've shipped", href: '#work' },
+  // Served straight from the GitHub repo's public/ folder (raw.githubusercontent.com),
+  // not bundled into the build. Update the resume by replacing the file in the repo
+  // and pushing — no app redeploy needed for the new version to go live.
+  resumeCta: {
+    label: 'Download Resume',
+    href: 'https://raw.githubusercontent.com/ashiqy04/ashiq-portfolio/main/public/resume/Ashiq-Y-Resume.pdf',
+  },
 }
 
 export const PILLARS = [

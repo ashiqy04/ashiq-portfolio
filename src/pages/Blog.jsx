@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Layout from '../components/Layout.jsx'
 import { fetchPublishedPosts } from '../lib/posts.js'
+import { useDocumentMeta } from '../lib/useDocumentMeta.js'
 
 function formatDate(ts) {
   if (!ts) return ''
@@ -10,6 +11,12 @@ function formatDate(ts) {
 }
 
 export default function Blog() {
+  useDocumentMeta({
+    title: 'Blog — Ashiq',
+    description: 'Writing on backend engineering, architecture decisions, and building Vultra.',
+    url: 'https://ashiq.vercel.app/blog',
+  })
+
   const [posts, setPosts] = useState([])
   const [state, setState] = useState('loading') // loading | ready | error
 

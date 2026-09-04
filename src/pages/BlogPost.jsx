@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import Layout from '../components/Layout.jsx'
 import { fetchPostBySlug } from '../lib/posts.js'
+import { useDocumentMeta } from '../lib/useDocumentMeta.js'
 
 function formatDate(ts) {
   if (!ts) return ''
@@ -24,6 +25,13 @@ export default function BlogPost() {
       })
       .catch(() => setState('error'))
   }, [slug])
+
+  useDocumentMeta({
+    title: post ? `${post.title} — Ashiq` : undefined,
+    description: post?.excerpt,
+    image: post?.coverImageUrl ? new URL(post.coverImageUrl, window.location.origin).href : undefined,
+    url: `https://ashiq.vercel.app/blog/${slug}`,
+  })
 
   return (
     <Layout>

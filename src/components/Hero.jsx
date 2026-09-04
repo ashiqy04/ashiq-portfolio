@@ -32,6 +32,9 @@ export default function Hero() {
         <a className="btn btn-ghost" href={HERO.secondaryCta.href}>
           {HERO.secondaryCta.label}
         </a>
+        <a className="btn btn-ghost" href={HERO.resumeCta.href} target="_blank" rel="noopener noreferrer">
+          {HERO.resumeCta.label}
+        </a>
       </div>
     </section>
   )
