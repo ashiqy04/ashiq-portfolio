@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1664" height="936" viewBox="0 0 1664 936">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08101f"/>
+      <stop offset="1" stop-color="#171717"/>
+    </linearGradient>
+    <linearGradient id="path" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#64748b"/>
+      <stop offset="0.65" stop-color="#94a3b8"/>
+      <stop offset="1" stop-color="#f5aa2f"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#263247" stroke-width="1"/>
+    </pattern>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1664" height="936" fill="url(#bg)"/>
+  <rect width="1664" height="936" fill="url(#grid)" opacity="0.48"/>
+
+  <text x="82" y="104" fill="#22c55e" font-family="monospace" font-size="28">$</text>
+  <text x="116" y="104" fill="#9fb0c8" font-family="monospace" font-size="28">trace --request /api</text>
+
+  <text x="82" y="225" fill="#f5f7fb" font-family="Arial, sans-serif" font-weight="700" font-size="62">
+    How I Approach Debugging
+  </text>
+  <text x="82" y="295" fill="#f5ad32" font-family="Arial, sans-serif" font-weight="700" font-size="62">
+    a Slow Spring Boot API
+  </text>
+
+  <text x="84" y="370" fill="#b9c6da" font-family="monospace" font-size="25">
+    Don't guess the bottleneck. Trace it.
+  </text>
+  <text x="84" y="407" fill="#8ea0bb" font-family="monospace" font-size="22">
+    Measure each layer, find the root cause, then optimize.
+  </text>
+
+  <!-- request flow -->
+  <path d="M160 690 C310 650 355 770 500 705 S700 610 815 680 S1010 735 1115 625 S1265 455 1425 355"
+        fill="none" stroke="#1f2937" stroke-width="18" opacity="0.65"/>
+  <path d="M160 690 C310 650 355 770 500 705 S700 610 815 680 S1010 735 1115 625 S1265 455 1425 355"
+        fill="none" stroke="url(#path)" stroke-width="5"/>
+
+  <!-- nodes -->
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <circle cx="160" cy="690" r="13" fill="#94a3b8" stroke="#0b1220" stroke-width="7"/>
+    <text x="160" y="748" fill="#d7dfeb" font-size="21">HTTP</text>
+
+    <circle cx="500" cy="705" r="13" fill="#94a3b8" stroke="#0b1220" stroke-width="7"/>
+    <text x="500" y="763" fill="#d7dfeb" font-size="21">Controller</text>
+
+    <circle cx="815" cy="680" r="13" fill="#94a3b8" stroke="#0b1220" stroke-width="7"/>
+    <text x="815" y="638" fill="#d7dfeb" font-size="21">Service</text>
+
+    <circle cx="1115" cy="625" r="13" fill="#94a3b8" stroke="#0b1220" stroke-width="7"/>
+    <text x="1115" y="580" fill="#d7dfeb" font-size="21">External API</text>
+
+    <circle cx="1425" cy="355" r="17" fill="#f5aa2f" filter="url(#glow)"/>
+    <text x="1425" y="306" fill="#f5aa2f" font-size="25" font-weight="700">Database</text>
+  </g>
+
+  <!-- diagnostic panel -->
+  <rect x="82" y="500" width="330" height="205" rx="8" fill="#0b1424" stroke="#334155"/>
+  <text x="110" y="540" fill="#64748b" font-family="monospace" font-size="18">// diagnosis</text>
+  <text x="110" y="580" fill="#cbd5e1" font-family="monospace" font-size="19">request_time = 5.2s</text>
+  <text x="110" y="615" fill="#cbd5e1" font-family="monospace" font-size="19">external_api = 3.0s</text>
+  <text x="110" y="650" fill="#cbd5e1" font-family="monospace" font-size="19">database = 1.2s</text>
+  <text x="110" y="685" fill="#f5aa2f" font-family="monospace" font-size="19">bottleneck = external_api</text>
+
+  <text x="82" y="870" fill="#71839e" font-family="monospace" font-size="21">
+    ashiq ~ java / spring boot / backend engineer
+  </text>
+  <text x="1300" y="870" fill="#f5aa2f" font-family="monospace" font-size="21">
+    measure → investigate → fix
+  </text>
+</svg>
