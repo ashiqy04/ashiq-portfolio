@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#07111f"/><stop offset="1" stop-color="#0d1728"/></linearGradient>
+<linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#3b82f6"/><stop offset=".5" stop-color="#22d3ee"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+<pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".045"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/><rect width="1600" height="900" fill="url(#grid)"/>
+<text x="120" y="125" fill="#60a5fa" font-family="monospace" font-size="25" letter-spacing="4">JAVA / SPRING BOOT / JPA</text>
+<text x="120" y="215" fill="#f8fafc" font-family="Arial,sans-serif" font-size="70" font-weight="700">Understanding the</text>
+<text x="120" y="295" fill="#f8fafc" font-family="Arial,sans-serif" font-size="70" font-weight="700">N+1 Query Problem</text>
+<text x="120" y="350" fill="#94a3b8" font-family="Arial,sans-serif" font-size="29">How Hibernate turns one query into many — and how to fix it.</text>
+<g transform="translate(120 470)">
+<rect width="250" height="135" rx="16" fill="#111d30" stroke="#334155"/>
+<text x="30" y="45" fill="#60a5fa" font-family="monospace" font-size="24">QUERY</text>
+<text x="30" y="88" fill="#e2e8f0" font-family="monospace" font-size="20">SELECT customers</text>
+<text x="30" y="115" fill="#64748b" font-family="monospace" font-size="17">1 query</text>
+<path d="M275 68H385" stroke="url(#accent)" stroke-width="5"/><path d="M370 55L390 68L370 81" fill="none" stroke="#22d3ee" stroke-width="5"/>
+<rect x="410" width="290" height="135" rx="16" fill="#111d30" stroke="#334155"/>
+<text x="440" y="45" fill="#f59e0b" font-family="monospace" font-size="24">N QUERIES</text>
+<text x="440" y="88" fill="#e2e8f0" font-family="monospace" font-size="20">SELECT orders</text>
+<text x="440" y="115" fill="#f59e0b" font-family="monospace" font-size="17">+ N database calls</text>
+<path d="M725 68H835" stroke="url(#accent)" stroke-width="5"/><path d="M820 55L840 68L820 81" fill="none" stroke="#f59e0b" stroke-width="5"/>
+<rect x="860" width="400" height="135" rx="16" fill="#111d30" stroke="#334155"/>
+<text x="890" y="45" fill="#22d3ee" font-family="monospace" font-size="24">RESULT</text>
+<text x="890" y="87" fill="#e2e8f0" font-family="monospace" font-size="20">1 + N queries</text>
+<text x="890" y="115" fill="#94a3b8" font-family="monospace" font-size="17">performance degradation</text>
+</g>
+<g transform="translate(1250 650)">
+<ellipse cx="120" cy="30" rx="105" ry="30" fill="#162338" stroke="#3b82f6" stroke-width="3"/>
+<path d="M15 30V145C15 162 62 175 120 175S225 162 225 145V30" fill="#111d30" stroke="#3b82f6" stroke-width="3"/>
+<text x="78" y="108" fill="#60a5fa" font-family="monospace" font-size="24">DB</text>
+</g>
+<text x="120" y="755" fill="#64748b" font-family="monospace" font-size="22">FETCH JOIN  •  ENTITY GRAPH  •  DTO PROJECTION</text>
+<rect x="120" y="790" width="610" height="5" rx="2.5" fill="url(#accent)"/>
+<text x="120" y="845" fill="#475569" font-family="monospace" font-size="18">portfolio.blog / performance / persistence</text>
+</svg>
