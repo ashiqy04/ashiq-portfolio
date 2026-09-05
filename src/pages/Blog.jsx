@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Layout from '../components/Layout.jsx'
 import { fetchPublishedPosts } from '../lib/posts.js'
 import { useDocumentMeta } from '../lib/useDocumentMeta.js'
+import { readingTime } from '../lib/readingTime.js'
 
 function formatDate(ts) {
   if (!ts) return ''
@@ -56,6 +57,7 @@ export default function Blog() {
             {post.excerpt && <p className="desc">{post.excerpt}</p>}
             <div className="project-footer">
               <span className="chip">{formatDate(post.publishedAt)}</span>
+              {post.content && <span className="chip">{readingTime(post.content)}</span>}
             </div>
           </Link>
         ))}
